@@ -1,0 +1,80 @@
+class NodoUsuario:
+    def __init__(self, nombre, identidad):
+        self.nombre = nombre
+        self.identidad = identidad
+        self.siguiente = None
+
+class ColaUsuarios:
+    def __init__(self):
+        self.primero = None
+        self.ultimo = None
+
+    def esta_vacia(self):
+        return self.primero is None
+
+    def agregar(self, nombre, identidad):
+        nuevo_usuario = NodoUsuario(nombre, identidad)
+        if self.esta_vacia():
+            self.primero = nuevo_usuario
+            self.ultimo = nuevo_usuario
+        else:
+            self.ultimo.siguiente = nuevo_usuario
+            self.ultimo = nuevo_usuario
+
+    def atender(self):
+        if self.esta_vacia():
+            print("No hay usuarios en la cola.")
+            return None
+        usuario_atendido = self.primero
+        self.primero = self.primero.siguiente
+        if self.primero is None:
+            self.ultimo = None
+        return usuario_atendido.nombre, usuario_atendido.identidad
+
+def menu():
+    print("Bienvenido al Sistema de Gestión de Colas")
+    print("1. Agregar usuario a la cola")
+    print("2. Atender siguiente usuario")
+    print("3. Mostrar cola de usuarios")
+    print("4. Salir")
+
+def agregar_usuario(cola):
+    nombre = input("Ingrese el nombre del usuario: ")
+    identidad = input("Ingrese el número de identidad del usuario: ")
+    cola.agregar(nombre, identidad)
+    print("Usuario agregado a la cola.")
+
+def atender_siguiente_usuario(cola):
+    nombre, identidad = cola.atender()
+    if nombre:
+        print(f"Atendiendo a {nombre} con identidad {identidad}")
+
+def mostrar_cola(cola):
+    if cola.esta_vacia():
+        print("No hay usuarios en la cola.")
+    else:
+        print("Cola de usuarios:")
+        usuario_actual = cola.primero
+        while usuario_actual:
+            print(f"Nombre: {usuario_actual.nombre}, Identidad: {usuario_actual.identidad}")
+            usuario_actual = usuario_actual.siguiente
+
+def main():
+    cola = ColaUsuarios()
+    while True:
+        menu()
+        opcion = input("Seleccione una opción: ")
+        if opcion == "1":
+            agregar_usuario(cola)
+        elif opcion == "2":
+            atender_siguiente_usuario(cola)
+        elif opcion == "3":
+            mostrar_cola(cola)
+        elif opcion == "4":
+            print("Gracias por utilizar el Sistema de Gestión de Colas. ¡Hasta luego!")
+            break
+        else:
+            print("Opción no válida. Por favor, seleccione una opción válida.")
+
+if __name__ == "__main__":
+    main()
